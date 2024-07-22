@@ -6,8 +6,14 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+        blur: {
+            'extra-sm': '1.7px', // You can adjust the value to your preference
+        },
+    },
   },
-  plugins: [],
+  plugins: [
+     require('@tailwindcss/forms')
+  ],
 }
 

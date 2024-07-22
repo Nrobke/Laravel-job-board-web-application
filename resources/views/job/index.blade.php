@@ -1,23 +1,41 @@
 <x-layout>
+    <x-breadcrums class="mb-4"
+    :links="['jobs' => route('jobs.index')]"/>
+
+    <x-card class="mb-4 text-sm">
+        <form id="filtering-form" action="{{ route('jobs.index') }}" method="GET">
+            <div class="mb-4 grid grid-cols-2 gap-4">
+                <div>
+                    <div class="mb-1 font-semibold">Search</div>
+                    <x-text-input name="search" value="{{ request('search') }}" placeholder="Search for any text" form-id="filtering-form" />
+                </div>
+                <div>
+                    <div class="mb-1 font-semibold">Salary</div>
+                    <div class="flex space-x-2">
+                        <x-text-input name="min_salary" value="{{ request('min_salary') }}" placeholder="From" form-id="filtering-form"/>
+                        <x-text-input name="max_salary" value="{{ request('max_salary') }}" placeholder="To" form-id="filtering-form"/>
+                    </div>
+                </div>
+                <div>
+                    <div class="mb-1 font-semibold">Experience</div>
+                    <x-radio-group name="experience" :options="array_combine(array_map('ucfirst', App\Models\Job::$experience), App\Models\Job::$experience)"/>
+                </div>
+                <div>
+                    <div class="mb-1 font-semibold">Category</div>
+                    <x-radio-group name="category" :options="App\Models\Job::$category"/>
+                </div>
+            </div>
+            <x-button class="w-full">Filter</x-button>
+        </form>
+    </x-card>
     @foreach ($jobs as $job)
-       <x-card class="mb-4">
-        <div class="mb-4 flex justify-between">
-            <h2 class="text-lg">{{ $job->title }}</h2>
-            <div class="text-slate-500">
-                ${{number_format($job->salary)}}
-            </div>
+       <x-job-card class="mb-4" :$job>
+        <div>
+            <p class="mb-4 text-sm text-slate-500 max-h-16 blur-extra-sm">{{ Str::limit($job->description, 180) }}</p>
+            <x-link-button :href="route('jobs.show', $job)">
+                Show
+            </x-link-button>
         </div>
-        <div class="mb-4 flex items-center justify-between text-sm text-slate-500">
-            <div class="flex space-x-4">
-                <div>Company Name</div>
-                <div>{{ $job->location}}</div>
-            </div>
-            <div class="flex space-x-1 text-x5">
-                <x-tag>{{ Str::ucfirst($job->experience)}}</x-tag>
-                <x-tag>{{ $job->category }}</x-tag>
-            </div>
-        </div>
-        <p class="text-sm text-slate-500">{{ $job->description }}</p>
-       </x-card>
+       </x-job-card>
     @endforeach
 </x-layout>
