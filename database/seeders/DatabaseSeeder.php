@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
     {
 
         User::factory(300)->create();
+        User::factory()->create([
+            'name' => 'Kebron Abiy',
+            'email' => 'k@eagle.com',
+        ]);
 
         $users = User::all()->shuffle();
 
@@ -36,11 +40,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // User::factory(10)->create();
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+
     }
 }
