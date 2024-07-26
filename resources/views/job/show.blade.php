@@ -4,14 +4,20 @@
    <x-job-card :$job>
     <p class="mb-4 text-sm text-slate-500">{{ $job->description }}</p>
 
-    @can()
+    @can('apply', $job)
         <x-link-button :href="route('job.application.create', $job)">
             Apply
         </x-link-button>
     @else
-        <div class="text-center text-sm font-medium text-slate-500">
-            You already applied to this job
-        </div>
+        @if (auth()->user())
+            <div class="text-center text-sm font-medium text-slate-500">
+                You already applied to this job
+            </div>
+        @else
+            <div class="text-center text-sm font-medium text-slate-500">
+                you need to log in to apply for this job
+            </div>
+        @endif
     @endcan
 
    </x-job-card>
