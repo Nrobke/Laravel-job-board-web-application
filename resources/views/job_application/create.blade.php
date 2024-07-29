@@ -1,5 +1,5 @@
 <x-layout>
-    <x-breadcrums class="mb-4"
+    <x-breadcrumbs class="mb-4"
     :links="[
         'Jobs' => route('jobs.index'),
         $job->title => route('jobs.show', $job),
@@ -29,5 +29,5 @@
       <x-button class="w-full">Apply</x-button>
     </form>
   </x-card>
-  
+
 </x-layout>

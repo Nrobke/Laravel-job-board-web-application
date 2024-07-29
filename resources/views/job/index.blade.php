@@ -1,5 +1,5 @@
 <x-layout>
-    <x-breadcrums class="mb-4"
+    <x-breadcrumbs class="mb-4"
     :links="['jobs' => route('jobs.index')]"/>
 
     <x-card class="mb-4 text-sm" x-data="">

@@ -1,5 +1,5 @@
 <x-layout>
-    <x-breadcrums class="mb-4"
+    <x-breadcrumbs class="mb-4"
     :links="['My Job Application' => '#']" />
 
     @forelse ($applications as $application)
