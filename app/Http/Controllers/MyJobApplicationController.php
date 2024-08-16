@@ -25,7 +25,7 @@ class MyJobApplicationController extends Controller
 
     public function destroy(JobApplication $myJobApplication)
     {
-        $myJobApplication ->delete();
+        $myJobApplication->delete();
         return redirect()->back()->with('success', 'Job Application removed');
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\JobRequest;
+use App\Mail\JobPosted;
 use App\Models\Job;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class MyJobController extends Controller
 {
@@ -44,10 +47,16 @@ class MyJobController extends Controller
     {
         Gate::authorize('create', Job::class);
 
-        auth()->user()->employer->jobs()->create($request->validated());
+        $job = auth()->user()->employer->jobs()
+                ->create($request->validated());
+
+        Mail::to(auth()->user())->queue(
+            new JobPosted($job)
+        );
 
         return redirect()->route('my-jobs.index')
             ->with('success', 'Job created successfully.');
+
     }
 
     /**
@@ -76,8 +85,28 @@ class MyJobController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Job $myJob)
     {
-        //
+        try
+        {
+            $myJob->delete();
+            return redirect()->route('my-jobs.index')
+                ->with('success', 'Job Deleted successfully.');
+
+        } catch(Exception $e){
+
+            $errorMessage = $e->getMessage();
+
+            if (str_contains($errorMessage, 'SQLSTATE')) {
+                $errorMessage = 'Database error occurred while deleting the job.';
+            } else {
+                // You can define other custom messages based on specific keywords
+                $errorMessage = 'An error occurred while deleting the job.';
+            }
+
+            return redirect()->route('my-jobs.index')
+                ->with('error', $errorMessage);
+        }
+
     }
 }

@@ -26,7 +26,7 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
-        Gate::authorize('view', Job::class);
+        Gate::authorize('view', [$job]);
 
         return view('job.show', ['job' => $job->load('employer.jobs')]);
     }

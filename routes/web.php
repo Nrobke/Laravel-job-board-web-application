@@ -7,12 +7,23 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\MyJobApplicationController;
 use App\Http\Controllers\MyJobController;
 use App\Http\Middleware\Employer as MiddlewareEmployer;
+use App\Jobs\TranslateJob;
+use App\Mail\JobPosted;
 use App\Models\Employer;
+use App\Models\Job;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', fn() => to_route('jobs.index'));
 Route::resource('jobs', JobController::class)->only(['index', 'show']);
+
+Route::get('test', function(){
+    $job = Job::first();
+    TranslateJob::dispatch($job);
+
+    return 'Done';
+});
 
 Route::get('login', fn() => to_route('auth.create'))->name('login');
 Route::resource('auth', AuthController::class)
